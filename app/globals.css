@@ -74,6 +74,7 @@ body {
 
 .cl-footer,
 .cl-userButtonPopoverFooter,
-.cl-navbar .cl-header {
+.cl-navbar .cl-header,
+.cl-header {
   display: none;
 }

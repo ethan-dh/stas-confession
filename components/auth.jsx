@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { SignedIn, SignedOut, SignIn, SignUp } from "@clerk/nextjs";
+import {
+  AuthenticateWithRedirectCallback,
+  SignedIn,
+  SignedOut,
+  SignIn,
+  SignUp,
+} from "@clerk/nextjs";
 import { LogIn } from "lucide-react";
 
 const Auth = () => {
@@ -27,11 +33,14 @@ const Auth = () => {
 
             <div className="flex flex-col items-center justify-center gap-4">
               <div className="text-center">
-                <h1 className="text-2xl font-bold">Connectez vous</h1>
+                <h1 className="text-2xl font-bold">Votre compte:</h1>
                 <span className="text-sm text-muted-foreground">
                   C&apos;est 100% anonyme
                 </span>
               </div>
+              <h2>S&apos;inscrire</h2>
+              <SignUp />
+              <h2>Se connecter</h2>
               <SignIn />
             </div>
           </div>

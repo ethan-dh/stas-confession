@@ -1,16 +1,18 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const MessagesList = ({ messages }) => {
   const messagesEndRef = useRef(null);
+  const isAdmin = useIsAdmin();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto">
+    <div className="flex-1 flex flex-col pt-5 px-5 h-full overflow-y-auto">
       <div className="flex-1"></div>
       <div className="flex flex-col space-y-5">
         {messages.map((message) => {
@@ -19,18 +21,26 @@ const MessagesList = ({ messages }) => {
           return (
             <div className="flex gap-2" key={message.id}>
               <div className="h-10 w-10 rounded-full shrink-0 overflow-hidden">
-                <img
-                  src={message.user_anon_profile_picture}
+                <Image
+                  src={
+                    isAdmin
+                      ? message.user_profile_picture
+                      : message.user_anon_profile_picture
+                  }
                   className="h-full w-full object-cover"
-                  alt={`${message.user_anon_name} profile`}
+                  alt={`${
+                    isAdmin ? message.user_real_name : message.user_anon_name
+                  } profile`}
+                  width={40}
+                  height={40}
                 />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="font-bold select-none">
-                    {message.user_anon_name}
+                  <h1 className="font-bold select-none text-muted-foreground">
+                    {isAdmin ? message.user_real_name : message.user_anon_name}
                   </h1>
-                  <h1 className="text-sm text-muted select-none">
+                  <h1 className="text-sm text-muted-foreground select-none">
                     {(() => {
                       const date = new Date(message.created_at);
                       const now = new Date();
@@ -58,9 +68,7 @@ const MessagesList = ({ messages }) => {
                     })()}
                   </h1>
                 </div>
-                <p className="text-muted-foreground break-all">
-                  {message.text}
-                </p>
+                <p className="text-foreground break-all">{message.text}</p>
               </div>
             </div>
           );
