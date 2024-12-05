@@ -33,6 +33,7 @@ export default function RootLayout({ children }) {
             href="/favicon-96x96.png"
             sizes="96x96"
           />
+          <meta property="og:image" content="https://i.imgur.com/Cr7uRXo.png" />
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
           <link rel="shortcut icon" href="/favicon.ico" />
           <link
