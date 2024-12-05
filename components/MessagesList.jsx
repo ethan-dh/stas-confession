@@ -27,7 +27,9 @@ const MessagesList = ({ messages }) => {
                       ? message.user_profile_picture
                       : message.user_anon_profile_picture
                   }
-                  className="h-full w-full object-cover"
+                  className={`h-full w-full object-cover ${
+                    !isAdmin && "blur-sm"
+                  }`}
                   alt={`${
                     isAdmin ? message.user_real_name : message.user_anon_name
                   } profile`}
@@ -37,7 +39,11 @@ const MessagesList = ({ messages }) => {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="font-bold select-none text-muted-foreground">
+                  <h1
+                    className={`font-bold select-none text-muted-foreground ${
+                      !isAdmin && "blur-sm"
+                    }`}
+                  >
                     {isAdmin ? message.user_real_name : message.user_anon_name}
                   </h1>
                   <h1 className="text-sm text-muted-foreground select-none">
