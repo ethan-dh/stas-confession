@@ -5,10 +5,14 @@ import { Input } from "./ui/input";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const ChatInput = () => {
   const supabase = supabaseBrowser();
   const { user } = useUser();
+  const isAdmin = useIsAdmin();
+  const [isAdminChecked, setIsAdminChecked] = React.useState(false);
+
   const handleSendMessage = async (text) => {
     const generateAnonName = (username) => {
       const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -44,6 +48,7 @@ const ChatInput = () => {
       user_anon_name: generateAnonName(user.fullName),
       user_profile_picture: user.imageUrl,
       user_anon_profile_picture: generateAnonProfilePicture(user.id),
+      is_admin: isAdminChecked,
     });
     if (error) {
       toast.message(error.message);
@@ -52,6 +57,19 @@ const ChatInput = () => {
 
   return (
     <div className="p-5">
+      {isAdmin && (
+        <div className="mb-2">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              checked={isAdminChecked}
+              onChange={(e) => setIsAdminChecked(e.target.checked)}
+              className="mr-2"
+            />
+            Marquer comme admin
+          </label>
+        </div>
+      )}
       <Input
         disabled={!user}
         placeholder={!user ? "Veuillez vous connecter" : "Envoyer un message"}
@@ -60,6 +78,9 @@ const ChatInput = () => {
           if (e.key === "Enter") {
             handleSendMessage(e.currentTarget.value);
             e.currentTarget.value = "";
+            if (isAdmin) {
+              setIsAdminChecked(false);
+            }
           }
         }}
       />

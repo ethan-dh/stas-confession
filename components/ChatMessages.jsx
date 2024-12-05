@@ -12,9 +12,18 @@ export default function ChatMessages() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fonction pour supprimer un message
+  const deleteMessage = async (id) => {
+    const { error } = await supabase.from("messages").delete().eq("id", id);
+
+    if (error) {
+      console.error("Erreur lors de la suppression du message :", error);
+    }
+  };
+
   useEffect(() => {
     let selectString =
-      "created_at, id, is_edit, text, user_anon_name, user_id, user_anon_profile_picture";
+      "created_at, id, is_edit, text, user_anon_name, user_id, user_anon_profile_picture, is_admin";
     if (isAdmin) {
       selectString += ", user_real_name, user_profile_picture";
     }
@@ -54,7 +63,7 @@ export default function ChatMessages() {
             const updatedMessages = prevMessages.filter(
               (message) => message.id !== payload.old.id
             );
-            console.log("Messages après suppression :", updatedMessages);
+
             return updatedMessages;
           });
         }
@@ -71,5 +80,5 @@ export default function ChatMessages() {
     return <div>Chargement...</div>;
   }
 
-  return <MessagesList messages={messages} />;
+  return <MessagesList messages={messages} deleteMessage={deleteMessage} />;
 }
